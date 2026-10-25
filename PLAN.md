@@ -108,9 +108,10 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - [x] Done when: new user sets up in < 2 min and lands on a polished, populated Command Center (scripted run: 3.8 s; wizard has "Fill example")
 
 ### Phase 2 — 3D map onboarding + Map page
-- [ ] Mapbox 3D fly-through (buildings, pitch/bearing, orange route, distance, days left, commute), Skip
-- [ ] Fallback to 2D Leaflet without token / with reduced motion
-- [ ] Map page with filterable pins (sale items, matched arrivals, donation sites, vendors)
+- [x] Mapbox 3D fly-through (Standard style 3D buildings, pitch/bearing choreography, orange route, distance, days left, commute), Skip
+- [x] Fallback to 2D Leaflet without token / WebGL / with reduced motion / if the style fails to load; schematic route until tiles load
+- [x] Map page with filterable pins (sale items, matched arrivals, donation sites, vendors) — `GET /api/map/pins`
+- Verified in sandbox: Mapbox initializes, style request is blocked by the network → 2D → schematic; Skip works in both modes.
 
 ### Phase 3 — Scan and decide
 - [ ] Upload / drag-drop per room, webcam capture, QR phone capture with live desktop updates
@@ -150,3 +151,4 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Decision D15: "resolved %" = (tasks due by move day that are done + items with a plan in motion) / (those tasks + items).
 - Decision D16: Spec seeds "10 arrival needs in San Francisco", but Maya's let-go items are in Long Beach and pickups are local,
   so matching requires the same city. Seed: 7 needs in Long Beach (people arriving where Maya leaves) + 3 in San Francisco.
+- Phase 2 done.

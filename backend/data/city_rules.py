@@ -109,3 +109,13 @@ def pickup_rule(city: str, category: str) -> dict | None:
         if r["category"] == "bulky" and category in r["applies_to"]:
             return r
     return next((r for r in rules if r["category"] == "bulky"), None)
+
+
+# Approximate locations, for the map only.
+DONATION_SITES: list[dict] = [
+    {"name": "Habitat for Humanity ReStore", "city": "Long Beach", "coordinates": [-118.1890, 33.8030], "accepts": "Furniture, appliances, decor"},
+    {"name": "Goodwill Donation Center", "city": "Long Beach", "coordinates": [-118.1300, 33.7700], "accepts": "Clothes, housewares, small furniture"},
+    {"name": "Salvation Army Family Store", "city": "Long Beach", "coordinates": [-118.1730, 33.7880], "accepts": "Furniture, clothes"},
+    {"name": "Goodwill SF — Mission", "city": "San Francisco", "coordinates": [-122.4190, 37.7620], "accepts": "Clothes, housewares"},
+    {"name": "St. Vincent de Paul Thrift", "city": "San Francisco", "coordinates": [-122.4060, 37.7720], "accepts": "Furniture pickups"},
+]

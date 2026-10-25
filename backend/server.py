@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse
 from agents import approval, booking, listing_pricing, matchmaker, pickup_booker, vendor_outreach  # noqa: F401  (register gate handlers)
 from core.config import get_settings
 from core.db import ensure_indexes, get_db
-from routes import auth, config, demo, files, home, moves, plan, sell, stuff, transport
+from routes import auth, config, demo, files, home, mapview, moves, plan, sell, stuff, transport
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("handoff")
@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Handoff API", lifespan=lifespan)
 
 api_router = APIRouter(prefix="/api")
-for r in (config, auth, moves, stuff, plan, sell, transport, home, demo, files):
+for r in (config, auth, moves, stuff, plan, sell, transport, home, mapview, demo, files):
     api_router.include_router(r.router)
 app.include_router(api_router)
 

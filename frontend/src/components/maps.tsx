@@ -56,7 +56,7 @@ export function SchematicRoute({ fromLabel, toLabel, className }: { fromLabel?: 
         <circle cx="120" cy="420" r="9" fill="#fff" stroke="#FF6600" strokeWidth="4" />
         <circle cx="640" cy="90" r="11" fill="#FF6600" stroke="#fff" strokeWidth="4" />
         {fromLabel && <text x="140" y="445" fill="#fff" fillOpacity=".75" fontSize="18" fontFamily="Inter Variable, sans-serif">{fromLabel}</text>}
-        {toLabel && <text x="560" y="135" fill="#fff" fillOpacity=".9" fontSize="18" fontWeight="600" fontFamily="Inter Variable, sans-serif">{toLabel}</text>}
+        {toLabel && <text x="625" y="135" textAnchor="end" fill="#fff" fillOpacity=".9" fontSize="18" fontWeight="600" fontFamily="Inter Variable, sans-serif">{toLabel}</text>}
       </svg>
     </div>
   );
@@ -97,13 +97,14 @@ export function tileUrl(token?: string | null, dark?: boolean) {
   return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 }
 
-export function PinMap({ pins, token, route, className, dark }: { pins: Pin[]; token?: string | null; route?: [LngLat, LngLat]; className?: string; dark?: boolean }) {
+export function PinMap({ pins, token, route, className, dark, controls = true, onTiles }: { pins: Pin[]; token?: string | null; route?: [LngLat, LngLat]; className?: string; dark?: boolean; controls?: boolean; onTiles?: (ok: boolean) => void }) {
   const points = useMemo(() => pins.map((p) => [p.lng, p.lat] as LngLat).concat(route ? route : []), [pins, route]);
   const center: [number, number] = points.length ? [points[0][1], points[0][0]] : [37.7749, -122.4194];
   return (
     <div className={cn("relative overflow-hidden rounded-card border border-border", className)}>
-      <MapContainer center={center} zoom={12} scrollWheelZoom className="h-full w-full" attributionControl>
+      <MapContainer center={center} zoom={12} scrollWheelZoom={controls} zoomControl={controls} className="h-full w-full" attributionControl>
         <TileLayer
+          eventHandlers={{ tileload: () => onTiles?.(true), tileerror: () => onTiles?.(false) }}
           url={tileUrl(token, dark)}
           attribution={token ? '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © OpenStreetMap' : "© OpenStreetMap contributors"}
         />
@@ -228,10 +229,16 @@ export function FlyThrough({ from, to, work, token, onDone, play = true, fromLab
     { id: "to", kind: "home", lng: to.coordinates[0], lat: to.coordinates[1], title: toLabel || "New home", color: "#FF6600" },
     ...(work ? [{ id: "work", kind: "work", lng: work.coordinates[0], lat: work.coordinates[1], title: "Work", color: "#2453B3" }] : []),
   ];
+  return <Flat2D pins={pins} token={token} from={from} to={to} fromLabel={fromLabel} toLabel={toLabel} />;
+}
+
+function Flat2D({ pins, token, from, to, fromLabel, toLabel }: { pins: Pin[]; token?: string | null; from: GeoPoint; to: GeoPoint; fromLabel?: string; toLabel?: string }) {
+  const [tiles, setTiles] = useState(false);
   return (
     <div className="absolute inset-0" data-testid="map-2d">
-      <SchematicRoute fromLabel={fromLabel} toLabel={toLabel} />
-      <PinMap pins={pins} token={token} route={[from.coordinates as LngLat, to.coordinates as LngLat]} className="absolute inset-0 rounded-none border-0 opacity-90" dark />
+      {!tiles && <SchematicRoute fromLabel={fromLabel} toLabel={toLabel} />}
+      <PinMap pins={pins} token={token} route={[from.coordinates as LngLat, to.coordinates as LngLat]} controls={false} onTiles={(ok) => ok && setTiles(true)}
+        className={cn("absolute inset-0 rounded-none border-0 transition-opacity duration-700 [&_.leaflet-container]:!bg-transparent", tiles ? "opacity-90" : "opacity-0")} dark />
     </div>
   );
 }
