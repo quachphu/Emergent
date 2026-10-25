@@ -316,6 +316,7 @@ async def execute_run(run_id: str) -> None:
         "stuff",
         f"Plan approved — running {len(enabled)} action{'s' if len(enabled) != 1 else ''}",
         reason="Anything that contacts someone, books or pays waits for your OK.",
+        receipt=steps.receipt("plan", "\n".join(f"{n + 1}. {a['title']}" for n, a in enumerate(enabled))),
         run_id=run_id,
         agent="orchestrator",
     )

@@ -123,9 +123,11 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - SSE streams end on shutdown (uvicorn `handle_exit` hook) so `--reload` doesn't hang.
 
 ### Phase 4 — Plan + visible agent steps
-- [ ] Backward scheduler for 5 lanes, replan on change + app load
-- [ ] Lane pages: table + board views
-- [ ] Plan preview (approve / edit / remove), live SSE step timeline with states, why, receipts, pause/undo/take over/retry
+- [x] Backward scheduler for 5 lanes, replan on change + app load (summary endpoint replans)
+- [x] Lane pages: table + board views (drag cards between status columns)
+- [x] Plan preview (approve / edit / remove), live SSE step timeline with states, why, receipts, pause/undo/take over/retry
+- [x] Done when: `tests/test_run.py` + browser run — approving a plan streams ~40 steps live, outbound ones wait with previews
+- Inbox page collects waiting steps, buyer pickup requests and the message log.
 
 ### Phase 5 — Sell and Handoff
 - [ ] Listings + approved price schedule, public item page, interest requests, Copy listing / Open Marketplace
@@ -157,3 +159,4 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
   so matching requires the same city. Seed: 7 needs in Long Beach (people arriving where Maya leaves) + 3 in San Francisco.
 - Phase 2 done.
 - Phase 3 done.
+- Phase 4 done.
