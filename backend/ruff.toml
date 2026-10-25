@@ -1,0 +1,10 @@
+line-length = 160
+target-version = "py311"
+exclude = [".venv"]
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "B008", "B904", "UP007", "B023", "E402"]
+
+[lint.isort]
+known-first-party = ["agents", "ai", "core", "data", "models", "routes", "services"]
