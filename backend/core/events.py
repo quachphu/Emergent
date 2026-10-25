@@ -35,3 +35,32 @@ def publish(move_id: str, kind: str, data: Any = None) -> None:
 
 def subscriber_count(move_id: str) -> int:
     return len(_subscribers.get(move_id, ()))
+
+
+# Long-lived SSE streams would block uvicorn's graceful shutdown/reload. Flag shutdown so they end.
+_shutting_down = False
+
+
+def shutting_down() -> bool:
+    return _shutting_down
+
+
+def install_shutdown_hook() -> None:
+    try:
+        from uvicorn.server import Server
+    except Exception:  # noqa: BLE001
+        return
+    if getattr(Server.handle_exit, "_handoff", False):
+        return
+    original = Server.handle_exit
+
+    def handle_exit(self, sig, frame):
+        global _shutting_down
+        _shutting_down = True
+        return original(self, sig, frame)
+
+    handle_exit._handoff = True  # type: ignore[attr-defined]
+    Server.handle_exit = handle_exit  # type: ignore[method-assign]
+
+
+install_shutdown_hook()

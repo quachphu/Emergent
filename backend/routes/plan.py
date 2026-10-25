@@ -9,7 +9,7 @@ from agents.approval import ApprovalRequired
 from agents.orchestrator import execute_run, propose_run, replan, run_action, spawn
 from core.db import get_db, now, to_json
 from core.deps import current_move, current_user, current_user_query, move_for_user
-from core.events import subscribe, unsubscribe
+from core.events import shutting_down, subscribe, unsubscribe
 from models.schemas import ActionPatch, TaskPatch
 
 router = APIRouter(tags=["plan"])
@@ -205,17 +205,22 @@ async def stream(request: Request, user: dict = Depends(current_user_query)):
     q = subscribe(move["_id"])
 
     async def gen():
+        idle = 0.0
         try:
             yield "retry: 3000\n\n"
             yield 'data: {"type":"hello"}\n\n'
-            while True:
+            while not shutting_down():
                 if await request.is_disconnected():
                     break
                 try:
-                    msg = await asyncio.wait_for(q.get(), timeout=15)
+                    msg = await asyncio.wait_for(q.get(), timeout=1.0)
+                    idle = 0.0
                     yield f"data: {msg}\n\n"
                 except TimeoutError:
-                    yield ": keepalive\n\n"
+                    idle += 1.0
+                    if idle >= 15:
+                        idle = 0.0
+                        yield ": keepalive\n\n"
         finally:
             unsubscribe(move["_id"], q)
 

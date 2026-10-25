@@ -59,7 +59,7 @@ NEEDS = [
     ("Daniel R.", "Long Beach", "Alamitos Beach", "small desk for a studio", "Just moved into a studio, need a compact desk for my laptop.", 10),
     ("Ana M.", "Long Beach", "Downtown Long Beach", "microwave", "Moving in next week, kitchen is empty!", 8),
     ("Jordan K.", "Long Beach", "Belmont Heights", "house plants", "Want some greenery for my first apartment.", 14),
-    ("Mei W.", "Long Beach", "Bixby Knolls", "kitchen table and two chairs", "Small dining set for two.", 15),
+    ("Mei W.", "Long Beach", "Bixby Knolls", "kitchen table and two chairs", "New grad starting at the port in two weeks — need a small table and chairs.", 15),
     ("Tara B.", "Long Beach", "Alamitos Beach", "dresser", "Any dresser with drawers.", 12),
     ("Omar H.", "Long Beach", "Downtown Long Beach", "commuter bike", "Need a bike to get to campus.", 20),
     ("Kenji T.", "San Francisco", "SoMa", "couch for a one-bedroom", "Arriving from Seattle for a job.", 18),

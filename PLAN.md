@@ -114,9 +114,13 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Verified in sandbox: Mapbox initializes, style request is blocked by the network → 2D → schematic; Skip works in both modes.
 
 ### Phase 3 — Scan and decide
-- [ ] Upload / drag-drop per room, webcam capture, QR phone capture with live desktop updates
-- [ ] Vision → items (all fields), edit/delete
-- [ ] Review deck (swipe + ←/→), keep-or-let-go rules (no SELL < 5 days; HANDOFF over DONATE when a need matches)
+- [x] Upload / drag-drop per room, webcam capture, QR phone capture with live desktop updates (SSE `scan_media` events)
+- [x] Vision → items (all fields), edit/delete (side panel)
+- [x] Review deck (swipe + ←/→, Enter = suggestion), keep-or-let-go rules (no SELL < 5 days; HANDOFF over DONATE when a need matches)
+- [x] Done when: `tests/test_scan.py` — dining chair + dining table photos → correct item cards with value ranges and reasons
+- Note: without an AI key the offline recognizer matches file names/hints against `data/catalog.py`; cards show "Check name".
+- Demo photos are illustrations generated for this repo (`backend/data/demo_photos`, `frontend/public/samples`).
+- SSE streams end on shutdown (uvicorn `handle_exit` hook) so `--reload` doesn't hang.
 
 ### Phase 4 — Plan + visible agent steps
 - [ ] Backward scheduler for 5 lanes, replan on change + app load
@@ -152,3 +156,4 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Decision D16: Spec seeds "10 arrival needs in San Francisco", but Maya's let-go items are in Long Beach and pickups are local,
   so matching requires the same city. Seed: 7 needs in Long Beach (people arriving where Maya leaves) + 3 in San Francisco.
 - Phase 2 done.
+- Phase 3 done.

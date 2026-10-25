@@ -27,7 +27,17 @@ async def pins(move: dict = Depends(current_move)):
         if not home or not item:
             continue
         dx, dy = _jitter(item["_id"], 0.004)
-        out.append({"id": f"sale-{li['_id']}", "kind": "sale", "lng": home[0] + dx, "lat": home[1] + dy, "title": li["title"], "subtitle": f"${int(li['current_price'])} · pickup only", "slug": li["public_slug"]})
+        out.append(
+            {
+                "id": f"sale-{li['_id']}",
+                "kind": "sale",
+                "lng": home[0] + dx,
+                "lat": home[1] + dy,
+                "title": li["title"],
+                "subtitle": f"${int(li['current_price'])} · pickup only",
+                "slug": li["public_slug"],
+            }
+        )
     seen = set()
     async for m in db.matches.find({"move_id": move["_id"]}).sort("score", -1):
         if m["need_id"] in seen:
@@ -39,11 +49,38 @@ async def pins(move: dict = Depends(current_move)):
             continue
         lng, lat = _pt(need["location"])
         status = {"accepted": "pickup set", "offered": "offer sent"}.get(m["status"], f"{int(m['score'] * 100)}% match")
-        out.append({"id": f"arrival-{need['_id']}", "kind": "arrival", "lng": lng, "lat": lat, "title": f"{need['arrival_name']} — {need['item_wanted']}", "subtitle": f"{item['name']} · {status}"})
+        out.append(
+            {
+                "id": f"arrival-{need['_id']}",
+                "kind": "arrival",
+                "lng": lng,
+                "lat": lat,
+                "title": f"{need['arrival_name']} — {need['item_wanted']}",
+                "subtitle": f"{item['name']} · {status}",
+            }
+        )
     for i, site in enumerate(DONATION_SITES):
-        out.append({"id": f"donate-{i}", "kind": "donation", "lng": site["coordinates"][0], "lat": site["coordinates"][1], "title": site["name"], "subtitle": f"{site['city']} · {site['accepts']}"})
+        out.append(
+            {
+                "id": f"donate-{i}",
+                "kind": "donation",
+                "lng": site["coordinates"][0],
+                "lat": site["coordinates"][1],
+                "title": site["name"],
+                "subtitle": f"{site['city']} · {site['accepts']}",
+            }
+        )
     async for v in db.vendors.find({}):
         if _pt(v.get("location")):
             lng, lat = _pt(v["location"])
-            out.append({"id": f"vendor-{v['_id']}", "kind": "vendor", "lng": lng, "lat": lat, "title": v["name"], "subtitle": f"{v['type'].replace('_', ' ')} · ★{v.get('rating')}"})
+            out.append(
+                {
+                    "id": f"vendor-{v['_id']}",
+                    "kind": "vendor",
+                    "lng": lng,
+                    "lat": lat,
+                    "title": v["name"],
+                    "subtitle": f"{v['type'].replace('_', ' ')} · ★{v.get('rating')}",
+                }
+            )
     return out
