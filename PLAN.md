@@ -135,10 +135,14 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - [x] Done when: `test_need_small_desk_matches_scanned_desk` — the need "small desk for a studio" matches the scanned desk
 
 ### Phase 6 — Transport + Stripe
-- [ ] City rules (SF, Long Beach) with steps, lead time, night-before reminders
-- [ ] HAUL bundle → gated SMS → (simulated) replies → parsed quote cards
-- [ ] Stripe Checkout (test) + webhook → booking paid, receipt in timeline, vendor notified, money panel
-- [ ] Mover request using the inventory
+- [x] City rules (SF, Long Beach) with steps, lead time, night-before reminders (task `curb_night_before` after booking)
+- [x] HAUL bundle → gated SMS → (simulated) replies → parsed quote cards side by side (rating, response time)
+- [x] Stripe Checkout (test) + webhook → booking paid, receipt in timeline, vendor notified, money panel; `/bookings/{id}/confirm`
+      verifies on return; in-app simulated test checkout when Stripe is unreachable (sandbox case)
+- [x] Mover request using the inventory (KEEP items) — "Get mover quotes"
+- [x] Twilio inbound webhook with signature validation
+- [x] Done when: browser run books a hauler with the 4242 test card (simulated checkout here) and the receipt lands in the timeline;
+      `tests/test_demo_story.py` runs the whole demo story through the API and ends at 76% resolved
 
 ### Phase 7 — Old home, new home, car, admin, vault
 - [ ] Notice letter, move-out photo checklist, deposit countdown (21 days CA) + follow-up letter
@@ -162,3 +166,5 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Phase 3 done.
 - Phase 4 done.
 - Phase 5 done.
+- Phase 6 done. Stripe couldn't be reached from the sandbox, so live Checkout is untested here (code path + webhook
+  signature verification are covered by tests with a test webhook secret).

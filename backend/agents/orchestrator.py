@@ -51,6 +51,8 @@ RESOLVED_ITEM_STATUSES = {
 }
 REHOMED_STATUSES = {"sold", "handoff_scheduled", "handed_off", "donated", "donation_planned"}
 DIVERTED_STATUSES = REHOMED_STATUSES | {"pickup_booked", "recycled"}
+# Rule markers Handoff applies by itself; shown in the plan but not counted as work.
+AUTOMATIC_TASKS = {"unsold_cutoff"}
 _bg: set[asyncio.Task] = set()
 
 
@@ -492,7 +494,7 @@ async def summary(move: dict, *, replan_first: bool = True) -> dict:
     done_tasks = sum(1 for t in tasks if t["status"] in {"done", "skipped"})
     # "Resolved" covers everything that has to happen by move day: every item + tasks due by then.
     md_iso = move["move_date"][:10]
-    pre = [t for t in tasks if t["due_date"] <= md_iso]
+    pre = [t for t in tasks if t["due_date"] <= md_iso and t["key"] not in AUTOMATIC_TASKS]
     pre_done = sum(1 for t in pre if t["status"] in {"done", "skipped"})
     denom = len(pre) + len(items)
     a = move.get("from_geo", {}).get("coordinates") if move.get("from_geo") else None

@@ -1,4 +1,5 @@
 import logging
+import os
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import Response
@@ -13,7 +14,7 @@ from core.db import get_db, to_json
 from core.deps import current_move, current_user
 from data.city_rules import rules_for
 from models.schemas import JobIn
-from services import stripe_service
+from services import sms, stripe_service
 
 log = logging.getLogger("handoff.transport")
 router = APIRouter(tags=["transport"])
@@ -132,9 +133,16 @@ async def stripe_webhook(request: Request):
 
 
 @router.post("/webhooks/twilio")
-async def twilio_webhook(From: str = Form(""), Body: str = Form("")):
-    # Twilio signs requests; validate X-Twilio-Signature when TWILIO_AUTH_TOKEN is set.
-    await handle_inbound_sms(From, Body)
+async def twilio_webhook(request: Request):
+    form = dict(await request.form())
+    s = get_settings()
+    if s.twilio_enabled:
+        url = os.environ.get("TWILIO_WEBHOOK_URL") or str(request.url)
+        if not sms.valid_twilio_signature(url, {k: str(v) for k, v in form.items()}, request.headers.get("x-twilio-signature")):
+            raise HTTPException(403, "Invalid Twilio signature.")
+    elif not s.demo_mode:
+        raise HTTPException(404, "SMS is not configured.")
+    await handle_inbound_sms(str(form.get("From", "")), str(form.get("Body", "")))
     return Response(content="<Response></Response>", media_type="application/xml")
 
 

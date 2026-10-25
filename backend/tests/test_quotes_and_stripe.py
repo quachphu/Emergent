@@ -100,3 +100,40 @@ async def test_simulated_checkout_uses_same_handler(demo):
     assert r.status_code == 200 and r.json()["status"] == "paid"
     jobs = (await c.get("/api/jobs")).json()
     assert any(j["status"] == "booked" for j in jobs)
+
+
+def test_twilio_signature_validation(monkeypatch):
+    import base64 as b64
+    import hashlib as hl
+    import hmac as hm
+
+    from core.config import reset_settings
+    from services.sms import valid_twilio_signature
+
+    monkeypatch.setenv("TWILIO_AUTH_TOKEN", "tok")
+    reset_settings()
+    url, params = "https://example.com/api/webhooks/twilio", {"From": "+15625550141", "Body": "$200 Sat"}
+    good = b64.b64encode(hm.new(b"tok", (url + "Body$200 SatFrom+15625550141").encode(), hl.sha1).digest()).decode()
+    assert valid_twilio_signature(url, params, good)
+    assert not valid_twilio_signature(url, params, "bad")
+    assert not valid_twilio_signature(url, params, None)
+
+
+async def test_inbound_sms_webhook_creates_quote(demo):
+    c = demo["client"]
+    from core.db import get_db
+
+    await c.post("/api/jobs", json={"type": "haul"})
+    for _ in range(50):
+        st = [s for s in (await c.get("/api/steps", params={"state": "waiting_for_user"})).json() if s.get("gate") and s["gate"]["handler"] == "send_job_sms"]
+        if st:
+            break
+        await asyncio.sleep(0.05)
+    # Mark the job sent without DEMO replies, then post a Twilio-style inbound reply.
+    job = await get_db().jobs.find_one({"type": "haul"})
+    vendor = await get_db().vendors.find_one({"type": "hauler"})
+    await get_db().jobs.update_one({"_id": job["_id"]}, {"$set": {"status": "sent", "vendor_ids": [vendor["_id"]]}})
+    r = await c.post("/api/webhooks/twilio", data={"From": vendor["phone"], "Body": "We can do it for $199, Friday after 2pm."})
+    assert r.status_code == 200
+    q = await get_db().quotes.find_one({"vendor_id": vendor["_id"], "price": 199})
+    assert q and q["eta"].lower().startswith("friday")

@@ -39,7 +39,7 @@ Backend (`backend/.env`, names in `backend/.env.example`):
   `ANTHROPIC_MODEL` (default `claude-opus-5-5`).
 - `MONGODB_AI_API_KEY`, `MONGODB_AI_ENDPOINT`, `EMBEDDING_MODEL` — Voyage embeddings via MongoDB.
 - `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` — test mode only.
-- `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` — simulated if any is missing.
+- `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` — simulated if any is missing. `TWILIO_WEBHOOK_URL` = the public webhook URL (signature check).
 - `MAPBOX_TOKEN` — public `pk.` token, served to the browser via `/api/config`. Missing → OpenStreetMap 2D.
 - `STEP_DELAY` (seconds between visible agent steps, default 0.9; tests use 0), `SIM_REPLY_MIN/MAX`.
 

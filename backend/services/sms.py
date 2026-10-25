@@ -4,6 +4,9 @@ Every outbound message must already carry the AI disclosure (see `disclose`)."""
 
 from __future__ import annotations
 
+import base64
+import hashlib
+import hmac
 import logging
 
 import httpx
@@ -44,3 +47,13 @@ async def send_sms(to: str, body: str) -> dict:
 def status() -> dict:
     s = get_settings()
     return {"provider": "twilio" if s.twilio_enabled else "simulated", "live": s.twilio_enabled}
+
+
+def valid_twilio_signature(url: str, params: dict, signature: str | None) -> bool:
+    """Twilio signs webhooks: base64(HMAC-SHA1(auth_token, url + sorted key/value pairs))."""
+    token = get_settings().twilio_token
+    if not token or not signature:
+        return False
+    payload = url + "".join(f"{k}{params[k]}" for k in sorted(params))
+    digest = base64.b64encode(hmac.new(token.encode(), payload.encode(), hashlib.sha1).digest()).decode()
+    return hmac.compare_digest(digest, signature)
