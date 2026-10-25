@@ -35,7 +35,7 @@ export default function HandoffMatches() {
       {!list.length ? (
         <EmptyState title="No matches yet" body="When an arrival needs something you're letting go, it shows up here." />
       ) : (
-        <ul className="grid gap-3 md:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {list.map((m) => (
             <li key={m.id}>
               <Card className="flex gap-4 p-4">

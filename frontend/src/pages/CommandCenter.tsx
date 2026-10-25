@@ -3,7 +3,7 @@ import { ArrowRight, Bot, Clock, Inbox, MapPin, Navigation, Play, ScanLine } fro
 import { Link, useNavigate } from "react-router-dom";
 import { Countdown, ImpactCard, LaneCard, MoneyPanel, StatPill, TaskRow } from "@/components/cards";
 import { EmptyState, ErrorState, SectionTitle } from "@/components/common";
-import { SchematicRoute } from "@/components/maps";
+import { SchematicRoute } from "@/components/SchematicRoute";
 import { CountUp, ProgressRing, Stagger } from "@/components/motion";
 import { usePanel } from "@/components/SidePanel";
 import { StepTimeline } from "@/components/StepTimeline";
@@ -83,7 +83,7 @@ export default function CommandCenter() {
         )}
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_1fr]">
         <div className="space-y-6">
           <Card className="p-5">
             <SectionTitle action={<Link to="/inbox" className="text-[13px] font-medium text-orange-text hover:underline">Inbox ({s?.inbox_count ?? 0})</Link>}>Today</SectionTitle>

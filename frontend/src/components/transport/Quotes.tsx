@@ -115,7 +115,7 @@ export function Quotes() {
     }
   };
   if (jobs.isError) return <ErrorState error={jobs.error} onRetry={() => jobs.refetch()} />;
-  if (jobs.isLoading) return <div className="grid gap-4 md:grid-cols-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-72" />)}</div>;
+  if (jobs.isLoading) return <div className="grid grid-cols-1 gap-4 md:grid-cols-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-72" />)}</div>;
   const list = jobs.data || [];
   const has = (t: string) => list.some((j) => j.type === t);
   return (
@@ -147,7 +147,7 @@ export function Quotes() {
                 {bookedJob ? "Booked" : job.status === "sent" ? (waiting ? <><PulseDot className="mr-1" /> Waiting for replies</> : "Quotes in") : "Waiting for your OK to text vendors"}
               </Badge>
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {job.quotes.map((q) => (
                 <QuoteCard key={q.id} quote={q} best={!!q.price && q.price === min && priced.length > 1} fastest={false} booked={bookedJob} onBook={() => book(q)} busy={booking === q.id} />
               ))}

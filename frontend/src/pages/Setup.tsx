@@ -176,7 +176,7 @@ export default function Setup() {
                   </div>
                   <div>
                     <div className="mb-2 text-[13px] font-medium">How are you moving what you keep?</div>
-                    <div className="grid gap-2 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {METHODS.map((m) => (
                         <button key={m.id} onClick={() => set({ move_method: m.id })} aria-pressed={form.move_method === m.id}
                           className={cn("flex items-start gap-3 rounded-card border p-4 text-left transition-all", form.move_method === m.id ? "border-orange bg-orange-tint shadow-glow" : "border-border bg-surface hover:bg-surface-2")}>

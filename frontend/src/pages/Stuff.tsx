@@ -97,7 +97,7 @@ export default function Stuff() {
         <TabsContent value="listings"><Suspense fallback={<Skeleton className="h-64" />}><Listings /></Suspense></TabsContent>
         <TabsContent value="handoff"><Suspense fallback={<Skeleton className="h-64" />}><HandoffMatches /></Suspense></TabsContent>
         <TabsContent value="plan">
-          <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="stuff" /><LaneSteps lane="stuff" /></div>
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="stuff" /><LaneSteps lane="stuff" /></div>
         </TabsContent>
       </Tabs>
     </div>

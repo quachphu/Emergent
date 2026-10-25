@@ -104,7 +104,7 @@ export default function RunPage() {
       <PageHeader emoji="🤖" title="Agent runs" subtitle="Handoff proposes a plan, you edit and approve it, then every step runs live with a receipt. Anything that contacts someone, books or pays waits for your OK."
         actions={<Button onClick={() => propose.mutate()} loading={propose.isPending} variant={r?.status === "proposed" ? "secondary" : "primary"} data-testid="propose"><Sparkles /> {r?.status === "proposed" ? "Re-plan" : "New plan"}</Button>} />
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_1fr]">
         <Card className="overflow-hidden">
           <div className="relative bg-hero p-5 text-white">
             <div className="flex items-center gap-2 text-[13px] font-semibold text-orange"><Bot className="size-4" /> Handoff</div>

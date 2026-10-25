@@ -52,7 +52,7 @@ export default function MapPage() {
       ) : q.isLoading || config.isLoading ? (
         <Skeleton className="h-[60vh] w-full" />
       ) : (
-        <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_320px]">
           <PinMap pins={pins} token={config.data?.mapbox_token} dark={isDark()} className="h-[62vh] min-h-[420px]" />
           <Card className="max-h-[62vh] overflow-y-auto p-2">
             <ul>

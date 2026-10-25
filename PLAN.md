@@ -153,9 +153,12 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - [x] Done when: `tests/test_homes.py` — sample lease → rent/term/deposit/notice + 11 flagged clauses + questions; admin checklist dated
 
 ### Phase 8 — Demo, polish, hardening
-- [ ] Seed (Maya, 14 items, 10 needs, 6 vendors, city rules), Reset demo button
-- [ ] Impact card; empty states, skeletons, toasts, retryable errors; mobile + dark passes
-- [ ] README, Playwright smoke test of the demo story
+- [x] Seed (Maya, 14 items with illustrated photos, 10 needs, 6 vendors, city rules), Reset demo button (Settings) + Try the demo (login)
+- [x] Impact card; empty states, skeletons, toasts, retryable errors, error boundary; mobile pass (no horizontal overflow on any page
+      at 390px, bottom tab bar, bottom-sheet side panel) and dark mode pass
+- [x] Settings: move details (replans), theme, integration status, reset demo
+- [x] README, Playwright smoke test of the demo story (`frontend/e2e/demo.spec.ts`)
+- [x] Done when: the Playwright demo story passes start to finish in 42 s with no page errors
 
 ## Status log
 - Phase 1 done. Backend for all phases scaffolded up front (agents, gate, routes, seed) with 19 pytest tests; frontend shell,
@@ -167,6 +170,12 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Phase 3 done.
 - Phase 4 done.
 - Phase 5 done.
+- Phase 8 done.
 - Phase 7 done.
 - Phase 6 done. Stripe couldn't be reached from the sandbox, so live Checkout is untested here (code path + webhook
   signature verification are covered by tests with a test webhook secret).
+
+## Not verified in the build sandbox (network-blocked)
+
+Live Claude vision/text calls, Voyage embeddings, Stripe Checkout + real webhooks, Twilio and Mapbox tiles/3D style.
+Each code path exists and degrades to its fallback; verify them once keys are set on Emergent.

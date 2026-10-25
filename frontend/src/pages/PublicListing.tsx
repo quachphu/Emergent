@@ -42,7 +42,7 @@ export default function PublicListing() {
   return (
     <PublicShell tagline="Local pickup · pay the seller in person">
       {q.isError ? <ErrorState error={q.error} /> : !d ? <Skeleton className="h-[480px]" /> : (
-        <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.25fr_1fr]">
           <div>
             <div className="overflow-hidden rounded-[20px] border border-border bg-surface-2 shadow-card">
               {d.photos[0] && <img src={assetUrl(d.photos[0])} alt={d.name} className="aspect-[4/3] w-full object-cover" />}
@@ -80,7 +80,7 @@ export default function PublicListing() {
                       ))}
                     </div>
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <Field label="Your name"><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
                     <Field label="Phone or email"><Input required value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} /></Field>
                   </div>

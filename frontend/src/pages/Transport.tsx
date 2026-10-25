@@ -54,10 +54,10 @@ export default function Transport() {
           <TabsTrigger value="car"><Car /> Car</TabsTrigger>
           <TabsTrigger value="plan"><ListChecks /> Plan</TabsTrigger>
         </TabsList>
-        <TabsContent value="quotes"><div className="grid gap-6 2xl:grid-cols-[1fr_380px]"><Quotes /><div className="hidden 2xl:block"><LaneSteps lane="transport" limit={8} /></div></div></TabsContent>
+        <TabsContent value="quotes"><div className="grid grid-cols-1 gap-6 2xl:grid-cols-[1fr_380px]"><Quotes /><div className="hidden 2xl:block"><LaneSteps lane="transport" limit={8} /></div></div></TabsContent>
         <TabsContent value="rules"><CityRules /></TabsContent>
         <TabsContent value="car"><Suspense fallback={<Skeleton className="h-64" />}><CarPanel /></Suspense></TabsContent>
-        <TabsContent value="plan"><div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="transport" /><LaneSteps lane="transport" /></div></TabsContent>
+        <TabsContent value="plan"><div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="transport" /><LaneSteps lane="transport" /></div></TabsContent>
       </Tabs>
     </div>
   );

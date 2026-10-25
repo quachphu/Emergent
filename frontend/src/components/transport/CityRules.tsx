@@ -32,7 +32,7 @@ export function CityRules() {
       {d.per_item.length > 0 && (
         <section>
           <SectionTitle>Your items</SectionTitle>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {d.per_item.map(({ item, rule }) => (
               <Card key={item.id} className="flex gap-3 p-4">
                 <img src={assetUrl(item.photos?.[0])} alt="" className="size-16 shrink-0 rounded-ctl bg-surface-2 object-cover" />
@@ -48,11 +48,11 @@ export function CityRules() {
       )}
       <section>
         <SectionTitle>{d.from_city} (moving out)</SectionTitle>
-        <div className="grid gap-3 md:grid-cols-2">{d.from_rules.map((r) => <RuleCard key={r.program} rule={r} />)}</div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">{d.from_rules.map((r) => <RuleCard key={r.program} rule={r} />)}</div>
       </section>
       <section>
         <SectionTitle>{d.to_city} (moving in)</SectionTitle>
-        <div className="grid gap-3 md:grid-cols-2">{d.to_rules.map((r) => <RuleCard key={r.program} rule={r} />)}</div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">{d.to_rules.map((r) => <RuleCard key={r.program} rule={r} />)}</div>
       </section>
       <p className="text-[12px] text-ink-2">{d.note}</p>
     </div>

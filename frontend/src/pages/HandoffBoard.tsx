@@ -47,10 +47,10 @@ export default function HandoffBoard() {
           <button key={c} onClick={() => setCity(c)} aria-pressed={city === c} className={cn("h-9 rounded-full border px-4 text-[14px] font-medium", city === c ? "border-ink bg-ink text-bg" : "border-border bg-surface")}>{c}</button>
         ))}
       </div>
-      <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
         <div>
           {needs.isLoading ? <Skeleton className="h-64" /> : !needs.data?.length ? <EmptyState title="No requests yet" body="Be the first to post." /> : (
-            <ul className="grid gap-3 sm:grid-cols-2">
+            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {needs.data.map((n) => (
                 <li key={n.id}>
                   <Card className="h-full p-4">

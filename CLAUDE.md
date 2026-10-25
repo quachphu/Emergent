@@ -10,7 +10,7 @@ Stack: React + TypeScript (Vite) in `frontend/`, FastAPI + Motor in `backend/`, 
 cd backend
 python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 cp .env.example .env            # fill in keys; MONGO_URL=mongomock://local runs an in-memory DB (demo auto-seeds)
-.venv/bin/uvicorn server:app --host 0.0.0.0 --port 8001 --reload
+.venv/bin/uvicorn server:app --host 0.0.0.0 --port 8001 --reload --timeout-graceful-shutdown 3
 
 # frontend (port 3000; proxies /api to :8001 when REACT_APP_BACKEND_URL is empty)
 cd frontend

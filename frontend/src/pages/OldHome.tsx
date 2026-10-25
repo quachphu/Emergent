@@ -92,7 +92,7 @@ export default function OldHome() {
     <div className="space-y-8">
       <PageHeader emoji={meta.emoji} title="Old home" subtitle="Notice to vacate, move-out photos, keys and getting your deposit back." />
       {!d ? <Skeleton className="h-80" /> : (
-        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
           <Card className="p-5">
             <SectionTitle action={d.notice.late ? <Badge tone="danger">Short notice</Badge> : <Badge tone="success">On time</Badge>}>Notice to vacate</SectionTitle>
             <p className="text-[14px] text-ink-2">{d.notice.message}</p>
@@ -141,7 +141,7 @@ export default function OldHome() {
           </div>
         </div>
       )}
-      <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="old_home" /><LaneSteps lane="old_home" /></div>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="old_home" /><LaneSteps lane="old_home" /></div>
     </div>
   );
 }

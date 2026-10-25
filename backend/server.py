@@ -23,6 +23,8 @@ log = logging.getLogger("handoff")
 async def lifespan(app: FastAPI):
     s = get_settings()
     await ensure_indexes()
+    if s.jwt_secret == "dev-insecure-secret" and not s.mongo_url.startswith("mongomock"):
+        log.warning("JWT_SECRET is not set — set it before deploying (sessions use a development secret).")
     log.info("handoff api ready (db=%s, llm=%s, demo_mode=%s)", "mock" if s.mongo_url.startswith("mongomock") else "mongodb", s.llm_provider, s.demo_mode)
     if s.demo_mode and s.mongo_url.startswith("mongomock") and not await get_db().users.find_one({}):
         from data.demo import seed

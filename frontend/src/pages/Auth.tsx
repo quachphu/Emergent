@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { SchematicRoute } from "@/components/maps";
+import { SchematicRoute } from "@/components/SchematicRoute";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { post } from "@/lib/api";

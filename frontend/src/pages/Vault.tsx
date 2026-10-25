@@ -46,12 +46,12 @@ export default function Vault() {
           <Input type="date" value={expires} onChange={(e) => setExpires(e.target.value)} className="h-10 w-40" aria-label="Expires on" /><Button onClick={() => input.current?.click()}><Upload /> Upload</Button></div>} />
       <input ref={input} type="file" hidden accept="application/pdf,image/*,text/plain" onChange={(e) => { send(e.target.files?.[0]); e.target.value = ""; }} />
       <SensitiveNotice text={docs.data?.notice} />
-      <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="space-y-6">
           {!docs.data ? <Skeleton className="h-64" /> : !groups.length ? <EmptyState art="doc" title="Your Vault is empty" body="Leases, letters, receipts and move-out photos land here automatically." /> : groups.map((g) => (
             <section key={g.k}>
               <SectionTitle>{LABEL[g.k]}</SectionTitle>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {g.docs.map((d: Doc) => {
                   const Icon = ICON[d.type] || FileText;
                   const soon = d.days_to_expiry !== undefined && d.days_to_expiry <= 30;

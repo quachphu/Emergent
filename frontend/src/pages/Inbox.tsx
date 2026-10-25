@@ -18,7 +18,7 @@ export default function InboxPage() {
   return (
     <div>
       <PageHeader emoji="📥" title="Inbox" subtitle="Everything waiting for your OK, pickup requests from buyers, and every message Handoff sent or received on your behalf." />
-      <div className="grid gap-6 xl:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.3fr_1fr]">
         <div className="space-y-6">
           <Card className="p-5">
             <SectionTitle>Waiting for you {d && <Badge tone="orange" className="ml-1">{d.waiting.length}</Badge>}</SectionTitle>

@@ -104,7 +104,7 @@ export default function NewHome() {
         actions={<><Button variant="secondary" onClick={() => input.current?.click()} loading={busy}><Upload /> Upload lease PDF</Button><Button variant="ghost" onClick={() => sample.mutate()} loading={sample.isPending}>Use a sample lease</Button></>} />
       <input ref={input} type="file" accept="application/pdf,text/plain" hidden onChange={(e) => { send(e.target.files?.[0]); e.target.value = ""; }} />
       {!d ? <Skeleton className="h-80" /> : (
-        <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.5fr_1fr]">
           <div className="space-y-4">
             {d.leases.length ? d.leases.map((l) => <LeaseSummary key={l.id} doc={l} note={d.legal_note} />) : <EmptyState art="doc" title="Upload your new lease" body="A PDF works best. Handoff summarizes it and flags anything worth asking about." />}
           </div>

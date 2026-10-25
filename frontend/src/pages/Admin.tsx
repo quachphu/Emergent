@@ -69,7 +69,7 @@ export default function Admin() {
           </ul>
         )}
       </Card>
-      <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="admin" /><LaneSteps lane="admin" /></div>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.4fr_1fr]"><LanePlan lane="admin" /><LaneSteps lane="admin" /></div>
     </div>
   );
 }

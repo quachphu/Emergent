@@ -60,7 +60,7 @@ export default function CarPanel() {
     );
   const val = (k: keyof Car) => (form[k] ?? car[k]) as any;
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.2fr]">
       <Card className="p-5">
         <div className="flex items-start justify-between">
           <div>
