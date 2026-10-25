@@ -63,3 +63,46 @@ async def test_rejects_non_images(demo):
     c = demo["client"]
     r = await c.post("/api/scan/upload", files=[("files", ("x.txt", b"hello", "text/plain"))], data={"auto_analyze": "false"})
     assert r.status_code == 422
+
+
+async def test_need_small_desk_matches_scanned_desk(client):
+    # Fresh user in Long Beach scans a desk; an arrival posts "small desk for a studio".
+    r = await client.post("/api/auth/signup", json={"name": "Sam Lee", "email": "sam@example.com", "password": "password123"})
+    client.headers["Authorization"] = f"Bearer {r.json()['token']}"
+    await client.post(
+        "/api/moves", json={"move_date": "2030-06-01", "from_address": "Alamitos Beach, Long Beach, CA", "to_address": "Mission District, San Francisco, CA"}
+    )
+    photo = (SAMPLES.parents[1] / ".." / "backend" / "data" / "demo_photos" / "desk.jpg").resolve().read_bytes()
+    media = (await client.post("/api/scan/upload", files=[("files", ("desk.jpg", photo, "image/jpeg"))], data={"auto_analyze": "false"})).json()
+    desk = (await client.post("/api/scan/analyze", json={"media_ids": [media[0]["id"]]})).json()[0]
+    assert desk["name"] == "Desk"
+    await client.post(
+        "/api/public/needs",
+        json={"arrival_name": "Daniel R.", "city": "Long Beach", "item_wanted": "small desk for a studio", "details": "Compact desk for my laptop."},
+    )
+    await client.post("/api/public/needs", json={"arrival_name": "Ana M.", "city": "Long Beach", "item_wanted": "microwave"})
+    matches = (await client.get("/api/matches")).json()
+    pairs = {(m["item"]["name"], m["need"]["item_wanted"]) for m in matches}
+    assert ("Desk", "small desk for a studio") in pairs
+    assert ("Desk", "microwave") not in pairs
+    assert all("contact" not in m["need"] for m in matches)  # arrivals' contacts never leak
+
+
+async def test_public_listing_and_interest(demo):
+    c = demo["client"]
+    listings = (await c.get("/api/listings")).json()
+    side = next(li for li in listings if li["status"] == "active")
+    del c.headers["Authorization"]
+    page = (await c.get(f"/api/public/listings/{side['public_slug']}")).json()
+    assert page["price"] > 0 and page["photos"] and page["pickup_windows"] and "in person" in page["payment_note"]
+    r = await c.post(
+        f"/api/public/listings/{side['public_slug']}/interest", json={"name": "Jo", "contact": "jo@example.com", "proposed_time": page["pickup_windows"][0]}
+    )
+    assert r.status_code == 200
+    c.headers["Authorization"] = f"Bearer {demo['token']}"
+    inbox = (await c.get("/api/inbox")).json()
+    req = next(r for r in inbox["requests"] if r["name"] == "Jo")
+    step = (await c.post(f"/api/listings/{req['listing_id']}/interest/{req['id']}/accept")).json()
+    assert step["state"] == "waiting_for_user" and "AI assistant" in step["gate"]["preview"]
+    sold = (await c.post(f"/api/listings/{side['id']}/sold", json={"price": 30})).json()
+    assert sold["status"] == "sold"

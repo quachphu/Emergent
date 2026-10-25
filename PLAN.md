@@ -130,8 +130,9 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Inbox page collects waiting steps, buyer pickup requests and the message log.
 
 ### Phase 5 — Sell and Handoff
-- [ ] Listings + approved price schedule, public item page, interest requests, Copy listing / Open Marketplace
-- [ ] Handoff board, embeddings, matching (similarity + city + dates), both sides accept a pickup window
+- [x] Listings + approved price schedule, public item page (`/l/:slug`), interest requests, Copy listing / Open Marketplace / Craigslist / OfferUp
+- [x] Handoff board (`/handoff`, public), embeddings, matching (similarity + city + dates), both sides accept a pickup window (`/offer/:id`)
+- [x] Done when: `test_need_small_desk_matches_scanned_desk` — the need "small desk for a studio" matches the scanned desk
 
 ### Phase 6 — Transport + Stripe
 - [ ] City rules (SF, Long Beach) with steps, lead time, night-before reminders
@@ -160,3 +161,4 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Phase 2 done.
 - Phase 3 done.
 - Phase 4 done.
+- Phase 5 done.

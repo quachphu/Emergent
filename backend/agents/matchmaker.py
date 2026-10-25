@@ -76,7 +76,7 @@ def pickup_windows(move_date: str, today: date | None = None) -> list[str]:
     today = today or date.today()
     md = parse_date(move_date)
     out = []
-    for offset, slot in [(3, "10am–12pm"), (2, "5–7pm"), (4, "9–11am")]:
+    for offset, slot in [(4, "9–11am"), (3, "10am–12pm"), (2, "5–7pm")]:
         d = md - timedelta(days=offset)
         if d <= today:
             d = today + timedelta(days=1)
@@ -162,11 +162,11 @@ async def has_match(item: dict, move: dict) -> bool:
     return need is not None
 
 
-def offer_message(user_name: str, item: dict, need: dict, windows: list[str], area: str) -> str:
+def offer_message(user_name: str, item: dict, need: dict, windows: list[str], area: str, link: str = "") -> str:
     body = (
         f"Hi {need.get('arrival_name')}! {user_name} is moving out and has a free {nm(item)} "
         f"that fits your request (\"{need.get('item_wanted')}\"). Pickup in {area}. "
-        f"Pick a window: {' / '.join(windows)}. Reply YES with a window to claim it."
+        f"Pick a window: {' / '.join(windows)}." + (f" Claim it here: {link}" if link else " Reply YES with a window to claim it.")
     )
     return sms.disclose(body, user_name)
 
@@ -174,7 +174,8 @@ def offer_message(user_name: str, item: dict, need: dict, windows: list[str], ar
 async def propose_offer(move: dict, user: dict, item: dict, match: dict, need: dict, *, run_id=None, action_id=None, task_id=None) -> dict:
     windows = match.get("pickup_windows") or pickup_windows(move["move_date"])
     area = move.get("from_area") or move.get("from_city") or "your area"
-    text = offer_message(user["name"], item, need, windows, area)
+    link = f"{get_settings().frontend_url}/offer/{match['_id']}?t={match.get('token', '')}"
+    text = offer_message(user["name"], item, need, windows, area, link)
     return await request_approval(
         move["_id"],
         "stuff",
