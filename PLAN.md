@@ -145,11 +145,12 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
       `tests/test_demo_story.py` runs the whole demo story through the API and ends at 76% resolved
 
 ### Phase 7 — Old home, new home, car, admin, vault
-- [ ] Notice letter, move-out photo checklist, deposit countdown (21 days CA) + follow-up letter
-- [ ] Lease PDF → text → summary + flags + questions; application checklist; utilities/internet; renters insurance
-- [ ] Car: photo estimate, sell or ship paths
-- [ ] Admin dated checklist with official links + drafted emails
-- [ ] Vault with expiry reminders
+- [x] Notice letter (signature line, user signs), move-out photo checklist (timestamped per room), deposit countdown (21 days CA) + follow-up letter
+- [x] Lease PDF → text (pypdf) → summary + flags + questions; application checklist; utilities/internet with lead times; renters insurance
+- [x] Car: photo/hint estimate, sell path (listing draft, checklist, user signs title) or ship path (auto-transport quotes via Phase 6 flow)
+- [x] Admin dated checklist with official links + drafted emails (copy / open in mail)
+- [x] Vault with expiry reminders
+- [x] Done when: `tests/test_homes.py` — sample lease → rent/term/deposit/notice + 11 flagged clauses + questions; admin checklist dated
 
 ### Phase 8 — Demo, polish, hardening
 - [ ] Seed (Maya, 14 items, 10 needs, 6 vendors, city rules), Reset demo button
@@ -166,5 +167,6 @@ Indexes: 2dsphere on items/vendors/needs `location`; TTL on `scan_media.expire_a
 - Phase 3 done.
 - Phase 4 done.
 - Phase 5 done.
+- Phase 7 done.
 - Phase 6 done. Stripe couldn't be reached from the sandbox, so live Checkout is untested here (code path + webhook
   signature verification are covered by tests with a test webhook secret).

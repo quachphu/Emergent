@@ -122,7 +122,9 @@ def _money(text: str, pattern: str) -> str | None:
 
 
 def lease_summary_fallback(text: str) -> LeaseSummary:
-    t = re.sub(r"\s+", " ", text or "")
+    # Drop numbered section headings ("5. Move-in Fee") so quoted clauses read cleanly.
+    t = re.sub(r"(^|\n)\s*\d+\.\s+[^\n]{1,40}\n", ". ", text or "")
+    t = re.sub(r"\s+", " ", t).lstrip(". ")
     rent = _money(t, r"(?:monthly )?rent[^$.]{0,60}\$\s?([\d,]+(?:\.\d{2})?)")
     deposit = _money(t, r"security deposit[^$.]{0,60}\$\s?([\d,]+(?:\.\d{2})?)")
     term_m = re.search(r"(\d{1,2})[- ]month", t, re.I)
@@ -135,7 +137,7 @@ def lease_summary_fallback(text: str) -> LeaseSummary:
         for m in re.finditer(pattern, t, re.I):
             clause = m.group(0).strip()[:220]
             key = clause[:60].lower()
-            if key in seen:
+            if key in seen or any(key in k or k in key for k in seen):
                 continue
             seen.add(key)
             flags.append(LeaseFlag(clause=clause, category=cat, severity=sev, explanation=why))
